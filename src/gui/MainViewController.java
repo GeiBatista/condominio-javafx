@@ -29,7 +29,7 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemCondominioAction() {
-		System.out.println("onMenuItemCondominioAction");
+		carregarTela("/gui/CondominioList.fxml");
 	}
 
 	@FXML
