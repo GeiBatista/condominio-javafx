@@ -1,9 +1,12 @@
 package gui;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import application.Main;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -12,9 +15,12 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.entities.Condominio;
+import model.services.CondominioService;
 
 public class CondominioListController implements Initializable{
 
+	private CondominioService service;
+	
 	@FXML
 	private TableView<Condominio> tableViewCondominio;
 	
@@ -25,10 +31,19 @@ public class CondominioListController implements Initializable{
 	private TableColumn<Condominio, String> tableColumnRazaoNome;
 	
 	@FXML
-	private Button btNovo;
+	private Button btNovo;	
 	
+	//objeto é associado a TableView para exibir oss condominios.
+	private ObservableList<Condominio> obsList;
+	
+	
+	@FXML
 	public void onBtNovoAction() {
 		System.out.println("onBtNovoAction");
+	}
+	 
+	public void setCondominioService(CondominioService service ) {
+		this.service = service;
 	}
 	
 	@Override
@@ -37,11 +52,21 @@ public class CondominioListController implements Initializable{
 	}
 
 	private void initializeNodes() {
-		tableColumnIdCodigo.setCellValueFactory(new PropertyValueFactory<>("Código"));
-		tableColumnRazaoNome.setCellValueFactory(new PropertyValueFactory<>("Nome"));
+		tableColumnIdCodigo.setCellValueFactory(new PropertyValueFactory<>("idCondominio"));
+		tableColumnRazaoNome.setCellValueFactory(new PropertyValueFactory<>("razaoSocial"));
 		
 		//código para tabela iniciar preenchendo toda janela pai.
 		Stage stage = (Stage)Main.getMainScene().getWindow();
 		tableViewCondominio.prefHeightProperty().bind(stage.heightProperty());
+	}
+	
+	//Método responsável por acessar os serviços, carregar os condominios e jogar na ObservableList.
+	public void updateTableView() {
+		if(service == null) {
+			throw new IllegalStateException("Service was null");
+		}
+		List<Condominio> list = service.findAll();
+		obsList = FXCollections.observableArrayList(list);
+		tableViewCondominio.setItems(obsList);
 	}
 }

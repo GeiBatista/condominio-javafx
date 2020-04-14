@@ -15,6 +15,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.VBox;
+import model.services.CondominioService;
 
 public class MainViewController implements Initializable {
 
@@ -29,7 +30,7 @@ public class MainViewController implements Initializable {
 
 	@FXML
 	public void onMenuItemCondominioAction() {
-		carregarTela("/gui/CondominioList.fxml");
+		carregarTela2("/gui/CondominioList.fxml");
 	}
 
 	@FXML
@@ -58,6 +59,28 @@ public class MainViewController implements Initializable {
 			mainVBox.getChildren().clear();
 			mainVBox.getChildren().add(mainMenu);
 			mainVBox.getChildren().addAll(newVbox.getChildren());
+		
+		} catch (IOException e) {
+			Alerts.showAlert("IO Exception", "Erro ao carregar Tela", e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	public synchronized void carregarTela2(String nomeAbsoluto) {
+		try {
+			FXMLLoader loader = new FXMLLoader(getClass().getResource(nomeAbsoluto));
+			VBox newVbox = loader.load();
+
+			Scene mainScene = Main.getMainScene();
+			VBox mainVBox = (VBox) ((ScrollPane) mainScene.getRoot()).getContent();
+
+			Node mainMenu = mainVBox.getChildren().get(0);
+			mainVBox.getChildren().clear();
+			mainVBox.getChildren().add(mainMenu);
+			mainVBox.getChildren().addAll(newVbox.getChildren());
+			
+			CondominioListController controller = loader.getController();
+			controller.setCondominioService(new CondominioService());
+			controller.updateTableView();
 		
 		} catch (IOException e) {
 			Alerts.showAlert("IO Exception", "Erro ao carregar Tela", e.getMessage(), AlertType.ERROR);

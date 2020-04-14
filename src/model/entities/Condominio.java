@@ -22,6 +22,11 @@ public class Condominio implements Serializable{
 
 	public Condominio() {
 	}
+	
+	public Condominio(Integer idCondominio, String razaoSocial) {
+		this.idCondominio = idCondominio;
+		this.razaoSocial = razaoSocial;
+	}
 
 	public Condominio(Integer idCondominio, String razaoSocial, String cnpj, String inscricaoEstadual,
 			String inscricaoMunicipal, String email, String telefone, String celular, String endereco,
