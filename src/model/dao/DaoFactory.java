@@ -5,7 +5,7 @@ import model.dao.impl.CondominioDaoJDBC;
 
 public class DaoFactory {
 
-	public static CondominioDao creatCondominioDao() {
+	public static CondominioDao createCondominioDao() {
 		return new CondominioDaoJDBC(DB.getConnection());
 	}
 }

@@ -89,7 +89,7 @@ public class CondominioDaoJDBC implements CondominioDao {
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
-						"UPDATE tbl_condominio"
+						"UPDATE tbl_condominio "
 						+ "SET "
 						+ "cond_razao_social = ?, "
 						+ "cond_cnpj = ?, "
@@ -195,7 +195,7 @@ public class CondominioDaoJDBC implements CondominioDao {
 		ResultSet rs = null;
 		try {
 			st = conn.prepareStatement(
-				"SELECT * FROM tbl_condominio ORDER BY Name");
+				"SELECT * FROM tbl_condominio ORDER BY cond_razao_social");
 			rs = st.executeQuery();
 
 			List<Condominio> list = new ArrayList<>();
