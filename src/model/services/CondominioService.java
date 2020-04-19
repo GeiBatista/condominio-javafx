@@ -1,6 +1,5 @@
 package model.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import model.dao.CondominioDao;
@@ -13,5 +12,14 @@ public class CondominioService {
 	
 	public List<Condominio> findAll(){		
 		return dao.findAll();
+	}
+	
+	public void saveOrUpdate(Condominio obj) {
+		if(obj.getIdCondominio() == null) {
+			dao.insert(obj);
+		}
+		else {
+			dao.update(obj);
+		}
 	}
 }

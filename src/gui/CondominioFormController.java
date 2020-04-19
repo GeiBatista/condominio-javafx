@@ -3,17 +3,21 @@ package gui;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import db.DbException;
+import gui.util.Alerts;
 import gui.util.Constraints;
+import gui.util.Utils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Condominio;
 import model.services.CondominioService;
 
-public class CondiminioFormController implements Initializable{
+public class CondominioFormController implements Initializable{
 	
 	private Condominio entity;
 	
@@ -44,12 +48,34 @@ public class CondiminioFormController implements Initializable{
 	
 	@FXML
 	public void onBtSalvarAction(ActionEvent event) {
-		System.out.println("onBtSalvarAction");
+		if(entity == null) {
+			throw new IllegalStateException("Entity was null");
+		}
+		if(service == null) {
+			throw new IllegalStateException("Service was null");
+		}
+		try {
+			entity = getFormData();
+			service.saveOrUpdate(entity);
+			Utils.currentStage(event).close();
+		}
+		catch(DbException e) {
+			Alerts.showAlert("Erro ao  salvar objeto", null, e.getMessage(), AlertType.ERROR);
+		}
+	}
+	
+	private Condominio getFormData() {
+		Condominio obj = new Condominio();
+		
+		obj.setIdCondominio(Utils.tryParseToInt(txtCodigo.getText()));
+		obj.setRazaoSocial(txtNome.getText());
+		
+		return obj;
 	}
 	
 	@FXML
 	public void onBtCancelarAction(ActionEvent event) {
-		System.out.println("onBtCancelarAction");
+		Utils.currentStage(event).close();
 	}
 	
 	@Override

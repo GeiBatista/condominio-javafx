@@ -86,7 +86,7 @@ public class CondominioListController implements Initializable{
 			FXMLLoader loader = new FXMLLoader(getClass().getResource(absoluteName));
 			Pane pane = loader.load();
 			
-			CondiminioFormController controller = loader.getController();
+			CondominioFormController controller = loader.getController();
 			controller.setCondominio(obj);
 			controller.setCondominioService(new CondominioService());
 			controller.updateFormData();
