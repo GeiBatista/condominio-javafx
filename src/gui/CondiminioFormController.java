@@ -10,8 +10,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import model.entities.Condominio;
+import model.services.CondominioService;
 
 public class CondiminioFormController implements Initializable{
+	
+	private Condominio entity;
+	
+	private CondominioService service;
 
 	@FXML
 	private TextField txtCodigo;
@@ -27,6 +33,14 @@ public class CondiminioFormController implements Initializable{
 	
 	@FXML
 	private Button btCancelar;
+	
+	public void setCondominio(Condominio entity) {
+		this.entity = entity;
+	}
+	
+	public void setCondominioService(CondominioService service) {
+		this.service = service;
+	}
 	
 	@FXML
 	public void onBtSalvarAction(ActionEvent event) {
@@ -46,6 +60,14 @@ public class CondiminioFormController implements Initializable{
 	private void initializeNodes() {
 		Constraints.setTextFieldInteger(txtCodigo);
 		Constraints.setTextFieldMaxLength(txtNome, 30);
+	}
+	
+	public void updateFormData() {
+		if(entity == null) {
+			throw new IllegalStateException("Entity was null");
+		}
+		txtCodigo.setText(String.valueOf(entity.getIdCondominio()));
+		txtNome.setText(String.valueOf(entity.getRazaoSocial()));
 	}
 
 }
