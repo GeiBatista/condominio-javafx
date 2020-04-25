@@ -3,7 +3,9 @@ package gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import db.DbException;
 import gui.listeners.DataChangeListener;
@@ -18,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import model.entities.Condominio;
+import model.exceptions.ValidationException;
 import model.services.CondominioService;
 
 public class CondominioFormController implements Initializable{
@@ -69,6 +72,9 @@ public class CondominioFormController implements Initializable{
 			notifyDataChangeListeners();
 			Utils.currentStage(event).close();
 		}
+		catch(ValidationException e) {
+			setErrorMessages(e.getErros());
+		}
 		catch(DbException e) {
 			Alerts.showAlert("Erro ao  salvar objeto", null, e.getMessage(), AlertType.ERROR);
 		}
@@ -83,8 +89,18 @@ public class CondominioFormController implements Initializable{
 	private Condominio getFormData() {
 		Condominio obj = new Condominio();
 		
+		ValidationException exception = new ValidationException("Validation error");
+		
 		obj.setIdCondominio(Utils.tryParseToInt(txtCodigo.getText()));
+		
+		if(txtNome.getText() == null || txtNome.getText().trim().equals("") || txtNome.getText().trim().equals("null") ) {
+			exception.addError("nome", "Campo não pode ser vazio");
+		}
 		obj.setRazaoSocial(txtNome.getText());
+		
+		if(exception.getErros().size() > 0) {
+			throw exception;
+		}
 		
 		return obj;
 	}
@@ -106,10 +122,18 @@ public class CondominioFormController implements Initializable{
 	
 	public void updateFormData() {
 		if(entity == null) {
-			throw new IllegalStateException("Entity was null");
+			throw new IllegalStateException("Entidade estava vazia");
 		}
 		txtCodigo.setText(String.valueOf(entity.getIdCondominio()));
 		txtNome.setText(String.valueOf(entity.getRazaoSocial()));
 	}
+	private void setErrorMessages(Map<String, String> errors) {
+		Set<String> fields = errors.keySet();
+		
+		if(fields.contains("nome")) {
+			labelErrorNome.setText(errors.get("nome"));
+		}
+	}
+
 
 }
