@@ -1,6 +1,7 @@
 package model.entities;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class Condominio implements Serializable{
 
@@ -19,6 +20,7 @@ public class Condominio implements Serializable{
 	private String cidade;
 	private String uf;
 	private String cep;
+	private Date data;
 
 	public Condominio() {
 	}
@@ -30,7 +32,7 @@ public class Condominio implements Serializable{
 
 	public Condominio(Integer idCondominio, String razaoSocial, String cnpj, String inscricaoEstadual,
 			String inscricaoMunicipal, String email, String telefone, String celular, String endereco,
-			String numeroEndereco, String complemetoEndereco, String bairro, String cidade, String uf, String cep) {
+			String numeroEndereco, String complemetoEndereco, String bairro, String cidade, String uf, String cep, Date data) {
 		this.idCondominio = idCondominio;
 		this.razaoSocial = razaoSocial;
 		this.cnpj = cnpj;
@@ -46,6 +48,7 @@ public class Condominio implements Serializable{
 		this.cidade = cidade;
 		this.uf = uf;
 		this.cep = cep;
+		this.data = data;
 	}
 
 	public Integer getIdCondominio() {
@@ -167,6 +170,14 @@ public class Condominio implements Serializable{
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
+	
+	public Date getData() {
+		return data;
+	}
+
+	public void setData(Date data) {
+		this.data = data;
+	}
 
 	@Override
 	public int hashCode() {
@@ -205,8 +216,10 @@ public class Condominio implements Serializable{
 				+ ", inscricaoEstadual=" + inscricaoEstadual + ", inscricaoMunicipal=" + inscricaoMunicipal + ", email="
 				+ email + ", telefone=" + telefone + ", celular=" + celular + ", endereco=" + endereco
 				+ ", numeroEndereco=" + numeroEndereco + ", complemetoEndereco=" + complemetoEndereco + ", bairro="
-				+ bairro + ", cidade=" + cidade + ", uf=" + uf + ", cep=" + cep + "]";
+				+ bairro + ", cidade=" + cidade + ", uf=" + uf + ", cep=" + cep + ", data=" + data + "]";
 	}
+
+	
 	
 	
 

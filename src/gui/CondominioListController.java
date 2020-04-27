@@ -9,6 +9,7 @@ import application.Main;
 import gui.listeners.DataChangeListener;
 import gui.util.Alerts;
 import gui.util.Utils;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -39,6 +41,9 @@ public class CondominioListController implements Initializable, DataChangeListen
 	
 	@FXML
 	private TableColumn<Condominio, String> tableColumnRazaoNome;
+	
+	@FXML
+	private TableColumn<Condominio, Condominio> tableColumnEditar;
 	
 	@FXML
 	private Button btNovo;	
@@ -80,6 +85,7 @@ public class CondominioListController implements Initializable, DataChangeListen
 		List<Condominio> list = service.findAll();
 		obsList = FXCollections.observableArrayList(list);
 		tableViewCondominio.setItems(obsList);
+		initEditButtons();
 	}
 	
 	private void createDialogForm(Condominio obj, String absoluteName, Stage parentStage) {
@@ -107,7 +113,25 @@ public class CondominioListController implements Initializable, DataChangeListen
 
 	@Override
 	public void onDataChanged() {
-		updateTableView();
-		
+		updateTableView();		
+	}
+	
+	private void initEditButtons() {
+		tableColumnEditar.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue()));
+		tableColumnEditar.setCellFactory(param -> new TableCell<Condominio, Condominio>() {
+			private final Button button = new Button("editar");
+
+			@Override
+			protected void updateItem(Condominio obj, boolean empty) {
+				super.updateItem(obj, empty);
+				if (obj == null) {
+					setGraphic(null);
+					return;
+				}
+				setGraphic(button);
+				button.setOnAction(
+						event -> createDialogForm(obj, "/gui/CondominioForm.fxml", Utils.currentStage(event)));
+			}
+		});
 	}
 }

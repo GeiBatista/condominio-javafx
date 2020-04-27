@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import db.DB;
@@ -24,6 +26,7 @@ public class CondominioDaoJDBC implements CondominioDao {
 
 	@Override
 	public void insert(Condominio obj) {
+		//SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
@@ -42,9 +45,11 @@ public class CondominioDaoJDBC implements CondominioDao {
 						+ "cond_bairro, "
 						+ "cond_cidade, "
 						+ "cond_uf, "
-						+ "cond_cep) "
+						+ "cond_cep, "
+						+ "cond_data_cadastro"
+						+ ") "
 						+ "VALUES "
-						+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+						+ "(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", 
 						Statement.RETURN_GENERATED_KEYS);
 			
 			st.setString(1, obj.getRazaoSocial());
@@ -61,6 +66,8 @@ public class CondominioDaoJDBC implements CondominioDao {
 			st.setString(12, obj.getCidade());
 			st.setString(13, obj.getUf());
 			st.setString(14, obj.getCep());
+			st.setDate(15, (java.sql.Date) obj.getData());
+			
 
 			int rowsAffected = st.executeUpdate();
 			
@@ -86,6 +93,7 @@ public class CondominioDaoJDBC implements CondominioDao {
 
 	@Override
 	public void update(Condominio obj) {
+		//SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		PreparedStatement st = null;
 		try {
 			st = conn.prepareStatement(
@@ -104,7 +112,8 @@ public class CondominioDaoJDBC implements CondominioDao {
 						+ "cond_bairro = ?, "
 						+ "cond_cidade = ?, "
 						+ "cond_uf = ?, "
-						+ "cond_cep = ?) "
+						+ "cond_cep = ?, "
+						+ "cond_data_cadastro = ? "
 						+ "WHERE pk_id_condominio = ?"
 						);
 			
@@ -122,7 +131,9 @@ public class CondominioDaoJDBC implements CondominioDao {
 			st.setString(12, obj.getCidade());
 			st.setString(13, obj.getUf());
 			st.setString(14, obj.getCep());
-
+			st.setDate(15, (java.sql.Date) obj.getData());
+			st.setInt(16, obj.getIdCondominio());
+			
 			st.executeUpdate();			
 		}
 		catch (SQLException e) {
@@ -178,6 +189,8 @@ public class CondominioDaoJDBC implements CondominioDao {
 				obj.setCidade(rs.getString("cond_cidade"));
 				obj.setUf(rs.getString("cond_uf"));
 				obj.setCep(rs.getString("cond_cep"));
+				obj.setData(rs.getDate("cond_data_cadastro"));
+				
 				return obj;
 			}
 			return null;
@@ -217,6 +230,7 @@ public class CondominioDaoJDBC implements CondominioDao {
 				obj.setCidade(rs.getString("cond_cidade"));
 				obj.setUf(rs.getString("cond_uf"));
 				obj.setCep(rs.getString("cond_cep"));
+				obj.setData(rs.getDate("cond_data_cadastro"));
 				list.add(obj);
 			}
 			return list;
