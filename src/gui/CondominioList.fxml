@@ -25,6 +25,7 @@
           <TableColumn fx:id="tableColumnIdCodigo" prefWidth="75.0" text="Código" />
           <TableColumn fx:id="tableColumnRazaoNome" prefWidth="75.0" text="Nome" />
             <TableColumn fx:id="tableColumnEditar" prefWidth="75.0" />
+            <TableColumn fx:id="tableColumnExcluir" prefWidth="75.0" />
         </columns>
       </TableView>
    </children>

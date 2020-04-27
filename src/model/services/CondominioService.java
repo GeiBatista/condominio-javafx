@@ -22,4 +22,8 @@ public class CondominioService {
 			dao.update(obj);
 		}
 	}
+	
+	public void remove(Condominio obj) {
+		dao.deleteById(obj.getIdCondominio());
+	}
 }
